@@ -1,6 +1,8 @@
 #!/bin/sh
 # docker entrypoint script
 # generate three tier certificate chain
+set -e
+set -x
 
 
 echo "[i] Start OpenSSL, cert file save path: $CERT_DIR"
@@ -28,13 +30,14 @@ then
     -out "$ROOT_NAME.csr" \
     -subj "$ROOT_SUBJ"
 
+
   openssl req \
     -x509 \
     -key "$ROOT_NAME.key" \
     -in "$ROOT_NAME.csr" \
     -out "$ROOT_NAME.crt" \
     -days "$DAYS" \
-    -subj "$ROOT_SUBJ"
+#    -subj "$ROOT_SUBJ"
 
   # copy certificate to volume
   cp "$ROOT_NAME.crt" "$CERT_DIR"
@@ -89,7 +92,7 @@ then
   PUBLIC_SUBJ="$SUBJ/CN=$PUBLIC_CN"
   openssl req \
     -new \
-    -key "$PUBLIC_NAME.key" \
+    -key "$CERT_DIR/$PUBLIC_NAME.key" \
     -out "$PUBLIC_NAME.csr" \
     -subj "$PUBLIC_SUBJ"
 
