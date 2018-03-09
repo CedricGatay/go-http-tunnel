@@ -7,7 +7,8 @@
 
 ## Usage
 
-> docker run -v /etc/ssl/certs:/etc/ssl/certs -p 4443:4443 tunneld/tunneld 
+> docker build . -t tunneld
+> docker run -d --name=tunneld --restart=always -v $(pwd)/certs:/etc/ssl/certs -p 4443:443 -p4080:80 -p45223:5223 -e PUBLIC_CN='' tunneld
 
 
 ## Docker run env options
